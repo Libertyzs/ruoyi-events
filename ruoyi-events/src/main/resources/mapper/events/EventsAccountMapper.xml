@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.events.mapper.EventsAccountMapper">
+    
+    <resultMap type="EventsAccount" id="EventsAccountResult">
+        <result property="accountId"    column="account_id"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="accountSchool"    column="account_school"    />
+        <result property="accountName"    column="account_name"    />
+        <result property="accountGroup"    column="account_group"    />
+        <result property="accountNick"    column="account_nick"    />
+        <result property="accountPassword"    column="account_password"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectEventsAccountVo">
+        select account_id ,events_account.role_id,e.role_name as roleName, account_school, account_name, account_group, account_nick, account_password, create_by, create_time, update_by, update_time, remark from events_account left join events_roles e on e.role_id = events_account.role_id
+    </sql>
+
+    <select id="selectEventsAccountList" parameterType="EventsAccount" resultMap="EventsAccountResult">
+        <include refid="selectEventsAccountVo"/>
+        <where>
+            <if test="roleId != null "> and events_account.role_id = #{roleId}</if>
+            <if test="accountSchool != null  and accountSchool != ''"> and account_school = #{accountSchool}</if>
+            <if test="accountGroup != null  and accountGroup != ''"> and account_group = #{accountGroup}</if>
+            <if test="accountNick != null  and accountNick != ''"> and account_nick like concat('%',#{accountNick},'%')</if>
+        </where>
+    </select>
+    
+    <select id="selectEventsAccountByAccountId" parameterType="Long" resultMap="EventsAccountResult">
+        <include refid="selectEventsAccountVo"/>
+        where account_id = #{accountId}
+    </select>
+        
+    <insert id="insertEventsAccount" parameterType="EventsAccount" useGeneratedKeys="true" keyProperty="accountId">
+        insert into events_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">role_id,</if>
+            <if test="accountSchool != null">account_school,</if>
+            <if test="accountName != null">account_name,</if>
+            <if test="accountGroup != null">account_group,</if>
+            <if test="accountNick != null">account_nick,</if>
+            <if test="accountPassword != null">account_password,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="accountSchool != null">#{accountSchool},</if>
+            <if test="accountName != null">#{accountName},</if>
+            <if test="accountGroup != null">#{accountGroup},</if>
+            <if test="accountNick != null">#{accountNick},</if>
+            <if test="accountPassword != null">#{accountPassword},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEventsAccount" parameterType="EventsAccount">
+        update events_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId != null">role_id = #{roleId},</if>
+            <if test="accountSchool != null">account_school = #{accountSchool},</if>
+            <if test="accountName != null">account_name = #{accountName},</if>
+            <if test="accountGroup != null">account_group = #{accountGroup},</if>
+            <if test="accountNick != null">account_nick = #{accountNick},</if>
+            <if test="accountPassword != null">account_password = #{accountPassword},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where account_id = #{accountId}
+    </update>
+
+    <delete id="deleteEventsAccountByAccountId" parameterType="Long">
+        delete from events_account where account_id = #{accountId}
+    </delete>
+
+    <delete id="deleteEventsAccountByAccountIds" parameterType="String">
+        delete from events_account where account_id in 
+        <foreach item="accountId" collection="array" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+    </delete>
+</mapper>
