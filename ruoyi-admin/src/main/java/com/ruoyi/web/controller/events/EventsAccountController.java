@@ -70,36 +70,4 @@ public class EventsAccountController extends BaseController
         return success(eventsAccountService.selectEventsAccountByAccountId(accountId));
     }
 
-    /**
-     * 新增账号管理
-     */
-    @PreAuthorize("@ss.hasPermi('events:account:add')")
-    @Log(title = "账号管理", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody EventsAccount eventsAccount)
-    {
-        return toAjax(eventsAccountService.insertEventsAccount(eventsAccount));
-    }
-
-    /**
-     * 修改账号管理
-     */
-    @PreAuthorize("@ss.hasPermi('events:account:edit')")
-    @Log(title = "账号管理", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody EventsAccount eventsAccount)
-    {
-        return toAjax(eventsAccountService.updateEventsAccount(eventsAccount));
-    }
-
-    /**
-     * 删除账号管理
-     */
-    @PreAuthorize("@ss.hasPermi('events:account:remove')")
-    @Log(title = "账号管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{accountIds}")
-    public AjaxResult remove(@PathVariable Long[] accountIds)
-    {
-        return toAjax(eventsAccountService.deleteEventsAccountByAccountIds(accountIds));
-    }
 }

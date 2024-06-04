@@ -27,35 +27,4 @@ public interface IEventsAccountService
      */
     public List<EventsAccount> selectEventsAccountList(EventsAccount eventsAccount);
 
-    /**
-     * 新增账号管理
-     * 
-     * @param eventsAccount 账号管理
-     * @return 结果
-     */
-    public int insertEventsAccount(EventsAccount eventsAccount);
-
-    /**
-     * 修改账号管理
-     * 
-     * @param eventsAccount 账号管理
-     * @return 结果
-     */
-    public int updateEventsAccount(EventsAccount eventsAccount);
-
-    /**
-     * 批量删除账号管理
-     * 
-     * @param accountIds 需要删除的账号管理主键集合
-     * @return 结果
-     */
-    public int deleteEventsAccountByAccountIds(Long[] accountIds);
-
-    /**
-     * 删除账号管理信息
-     * 
-     * @param accountId 账号管理主键
-     * @return 结果
-     */
-    public int deleteEventsAccountByAccountId(Long accountId);
 }

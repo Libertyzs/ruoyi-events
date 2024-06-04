@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.events.mapper.EventsWorksMapper">
+    
+    <resultMap type="EventsWorks" id="EventsWorksResult">
+        <result property="workId"    column="work_id"    />
+        <result property="accountId"    column="account_id"    />
+        <result property="workSchool"    column="work_school"    />
+        <result property="workGroup"    column="work_group"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAuthor"    column="work_author"    />
+        <result property="workDetails"    column="work_details"    />
+        <result property="contactInfo"    column="contact_info"    />
+        <result property="averageScore"    column="average_score"    />
+        <result property="submissionTime"    column="submission_time"    />
+    </resultMap>
+
+    <sql id="selectEventsWorksVo">
+        select work_id, account_id, work_school, work_group, work_name, work_author, work_details, contact_info, average_score, submission_time from events_works
+    </sql>
+
+    <select id="selectEventsWorksList" parameterType="EventsWorks" resultMap="EventsWorksResult">
+        <include refid="selectEventsWorksVo"/>
+        <where>  
+            <if test="accountId != null "> and account_id = #{accountId}</if>
+            <if test="workSchool != null  and workSchool != ''"> and work_school = #{workSchool}</if>
+            <if test="workGroup != null  and workGroup != ''"> and work_group = #{workGroup}</if>
+            <if test="workName != null  and workName != ''"> and work_name like concat('%', #{workName}, '%')</if>
+            <if test="workAuthor != null  and workAuthor != ''"> and work_author = #{workAuthor}</if>
+            <if test="workDetails != null  and workDetails != ''"> and work_details = #{workDetails}</if>
+            <if test="contactInfo != null  and contactInfo != ''"> and contact_info = #{contactInfo}</if>
+            <if test="averageScore != null "> and average_score = #{averageScore}</if>
+            <if test="submissionTime != null "> and submission_time = #{submissionTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectEventsWorksByWorkId" parameterType="Long" resultMap="EventsWorksResult">
+        <include refid="selectEventsWorksVo"/>
+        where work_id = #{workId}
+    </select>
+        
+    <insert id="insertEventsWorks" parameterType="EventsWorks" useGeneratedKeys="true" keyProperty="workId">
+        insert into events_works
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accountId != null">account_id,</if>
+            <if test="workSchool != null and workSchool != ''">work_school,</if>
+            <if test="workGroup != null and workGroup != ''">work_group,</if>
+            <if test="workName != null and workName != ''">work_name,</if>
+            <if test="workAuthor != null and workAuthor != ''">work_author,</if>
+            <if test="workDetails != null">work_details,</if>
+            <if test="contactInfo != null and contactInfo != ''">contact_info,</if>
+            <if test="averageScore != null">average_score,</if>
+            <if test="submissionTime != null">submission_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accountId != null">#{accountId},</if>
+            <if test="workSchool != null and workSchool != ''">#{workSchool},</if>
+            <if test="workGroup != null and workGroup != ''">#{workGroup},</if>
+            <if test="workName != null and workName != ''">#{workName},</if>
+            <if test="workAuthor != null and workAuthor != ''">#{workAuthor},</if>
+            <if test="workDetails != null">#{workDetails},</if>
+            <if test="contactInfo != null and contactInfo != ''">#{contactInfo},</if>
+            <if test="averageScore != null">#{averageScore},</if>
+            <if test="submissionTime != null">#{submissionTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEventsWorks" parameterType="EventsWorks">
+        update events_works
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="accountId != null">account_id = #{accountId},</if>
+            <if test="workSchool != null and workSchool != ''">work_school = #{workSchool},</if>
+            <if test="workGroup != null and workGroup != ''">work_group = #{workGroup},</if>
+            <if test="workName != null and workName != ''">work_name = #{workName},</if>
+            <if test="workAuthor != null and workAuthor != ''">work_author = #{workAuthor},</if>
+            <if test="workDetails != null">work_details = #{workDetails},</if>
+            <if test="contactInfo != null and contactInfo != ''">contact_info = #{contactInfo},</if>
+            <if test="averageScore != null">average_score = #{averageScore},</if>
+            <if test="submissionTime != null">submission_time = #{submissionTime},</if>
+        </trim>
+        where work_id = #{workId}
+    </update>
+
+    <delete id="deleteEventsWorksByWorkId" parameterType="Long">
+        delete from events_works where work_id = #{workId}
+    </delete>
+
+    <delete id="deleteEventsWorksByWorkIds" parameterType="String">
+        delete from events_works where work_id in 
+        <foreach item="workId" collection="array" open="(" separator="," close=")">
+            #{workId}
+        </foreach>
+    </delete>
+</mapper>
