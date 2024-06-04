@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.events.mapper.EventsEvaluateMapper">
+    
+    <resultMap type="EventsEvaluate" id="EventsEvaluateResult">
+        <result property="evaluateId"    column="evaluate_id"    />
+        <result property="workId"    column="work_id"    />
+        <result property="school"    column="school"    />
+        <result property="workName"    column="work_name"    />
+        <result property="judgeName"    column="judge_name"    />
+        <result property="score"    column="score"    />
+        <result property="evaluationContent"    column="evaluation_content"    />
+    </resultMap>
+
+    <sql id="selectEventsEvaluateVo">
+        select evaluate_id, work_id, school, work_name, judge_name, score, evaluation_content from events_evaluate
+    </sql>
+
+    <select id="selectEventsEvaluateList" parameterType="EventsEvaluate" resultMap="EventsEvaluateResult">
+        <include refid="selectEventsEvaluateVo"/>
+        <where>  
+            <if test="workId != null "> and work_id = #{workId}</if>
+            <if test="school != null  and school != ''"> and school = #{school}</if>
+            <if test="workName != null  and workName != ''"> and work_name like concat('%', #{workName}, '%')</if>
+            <if test="judgeName != null  and judgeName != ''"> and judge_name like concat('%', #{judgeName}, '%')</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="evaluationContent != null  and evaluationContent != ''"> and evaluation_content = #{evaluationContent}</if>
+        </where>
+    </select>
+    
+    <select id="selectEventsEvaluateByEvaluateId" parameterType="Long" resultMap="EventsEvaluateResult">
+        <include refid="selectEventsEvaluateVo"/>
+        where evaluate_id = #{evaluateId}
+    </select>
+
+    <insert id="insertEventsEvaluate" parameterType="EventsEvaluate" useGeneratedKeys="true" keyProperty="evaluateId">
+        insert into events_evaluate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workId != null">work_id,</if>
+            <if test="school != null and school != ''">school,</if>
+            <if test="workName != null and workName != ''">work_name,</if>
+            <if test="judgeName != null and judgeName != ''">judge_name,</if>
+            <if test="score != null">score,</if>
+            <if test="evaluationContent != null">evaluation_content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workId != null">#{workId},</if>
+            <if test="school != null and school != ''">#{school},</if>
+            <if test="workName != null and workName != ''">#{workName},</if>
+            <if test="judgeName != null and judgeName != ''">#{judgeName},</if>
+            <if test="score != null">#{score},</if>
+            <if test="evaluationContent != null">#{evaluationContent},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEventsEvaluate" parameterType="EventsEvaluate">
+        update events_evaluate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workId != null">work_id = #{workId},</if>
+            <if test="school != null and school != ''">school = #{school},</if>
+            <if test="workName != null and workName != ''">work_name = #{workName},</if>
+            <if test="judgeName != null and judgeName != ''">judge_name = #{judgeName},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="evaluationContent != null">evaluation_content = #{evaluationContent},</if>
+        </trim>
+        where evaluate_id = #{evaluateId}
+    </update>
+
+    <delete id="deleteEventsEvaluateByEvaluateId" parameterType="Long">
+        delete from events_evaluate where evaluate_id = #{evaluateId}
+    </delete>
+
+    <delete id="deleteEventsEvaluateByEvaluateIds" parameterType="String">
+        delete from events_evaluate where evaluate_id in 
+        <foreach item="evaluateId" collection="array" open="(" separator="," close=")">
+            #{evaluateId}
+        </foreach>
+    </delete>
+</mapper>
